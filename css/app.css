@@ -1,0 +1,20 @@
+body {
+  background: #111;
+  color: white;
+}
+
+.board {
+  
+  width: 900px;
+  border: 150px  ;
+  padding: 70px;
+  margin: 300px;
+  align-items: center;
+}
+.cell  {
+  background: linear-gradient(to top, #761818, #761818, #761818, #761818, #761818, #B54041, #F3686A);
+  cursor: pointer;
+}
+.selected {
+  background: linear-gradient(to top,  black, orange);
+}
