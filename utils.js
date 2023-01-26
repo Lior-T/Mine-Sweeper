@@ -1,30 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
+'use strict'
 
-<head>
-  <footer>Trosman Lior</footer>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Mine Sweeper</title>
-    <link rel="stylesheet" href="css/app.css">
-</head>
+function renderBoard(mat, selector) {
 
-<body onload="init()">
+  var strHTML = '<table><tbody>'
+  for (var i = 0; i < mat.length; i++) {
 
-    <h2>Score: <span>0</span></h2>
-    <div class="board">
-      <table class="board-mine">
-        <tbody id = 'cell'class="cell" onclick=" onCellClicked()"></tbody>
-      </table>
-    </div>
-    <div id="pop" hidden class="popup" ><h2>You lose!</h2>
-        <button onclick="init()">Restart</button>
-    </div>
-    
-    <script src="utils.js"></script>
-    <script src="game.js"></script>
-    <script src="bombs.js"></script>
-</body>
+    strHTML += '<tr>'
+    for (var j = 0; j < mat[0].length; j++) {
 
-</html>
+      const cell = mat[i][j]
+      const className = `cell cell-${i}-${j}`
+      strHTML += `<td class="${className}" onclick="onCellClicked(${i},${j})">${cell || ''}</td>`
+    }
+    strHTML += '</tr>'
+  }
+  strHTML += '</tbody></table>'
+
+  const elContainer = document.querySelector(selector)
+  elContainer.innerHTML = strHTML
+}
+
+// location is an object like this - { i: 2, j: 7 }
+function renderCell(location, value) {
+  // Select the elCell and set the value
+  const elCell = document.querySelector(`.cell-${location.i}-${location.j}`)
+  elCell.innerHTML = value
+}
+
+
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
