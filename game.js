@@ -1,12 +1,13 @@
 'use strict'
 var gBoard
-const NUM = 2
 const gGame = {
   minesAroundCount: 2,
   isShown: false,
   isMine: false,
-  isMarked: true
+  isMarked: true,
+  isOn: false
 }
+var virtualBoard = []
 
 const gLevel = {
   SIZE: 4,
@@ -15,10 +16,13 @@ const gLevel = {
 function init() {
   console.log('hello')
   gBoard = buildBoard()
-  createBombs(gBoard)
-
+  virtualBoard = buildBoard()
+  createMines(virtualBoard, gLevel.MINES)
+  initNegsCount(virtualBoard)
   renderBoard(gBoard, '.board')
   gGame.isOn = true
+  var elEnd = document.getElementById('pop')
+  elEnd.style.display = 'none'
 }
 function buildBoard() {
   const size = 4
@@ -28,30 +32,65 @@ function buildBoard() {
     board.push([])
 
     for (var j = 0; j < gLevel.SIZE; j++) {
-      if (board[i][j] !== BOMB)
-        board[i][j] = gGame.isShown = true
+      if (board[i][j] !== MINE)
+        board[i][j] = null
     }
 
   } return board
 }
 
+function setMinesNegsCount(virtualBoard, rowIdx, colIdx) {
+  var minesAroundCount = 0
+  for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
+    for (var j = colIdx - 1; j <= colIdx + 1; j++) {
+      var isColIdxValid = null
+      var isIValid = i < virtualBoard.length && i >= 0
+      if (isIValid) {
+        var isColIdxValid = j < virtualBoard[i].length && j >= 0
+        var isIdxCellClicked = rowIdx === i && colIdx === j
 
-for (var i = 0; i < gBoard.length; i++) {
-  for (var j = 0; j < gBoard[i].length; j++) {
+        if (isColIdxValid && isIValid && !isIdxCellClicked) {
+          if (virtualBoard[i][j] === MINE) {
+            minesAroundCount++
 
-    function setMinesNegsCount(gBoard, rowIdx, colIdx) {
-      var minesAroundCount = 0
-      for (var i = rowIdx - 1; i < rowIdx + 1; i++) {
-        if (i < 0 || i >= gBoard.length) continue
-        for (var j = colIdx - 1; j < colIdx + 1; j++) {
-          if (j < 0 || j >= gBoard.length) continue
-          var currentCell = gBoard[i][j]
-          if (currentCell === BOMB) minesAroundCount++
+
+          }
         }
-        return minesAroundCount
-
       }
+    }
+  }
+  return minesAroundCount
+}
+
+function initNegsCount(virtualBoard) {
+  for (var i = 0; i < gLevel.SIZE; i++) {
+    for (var j = 0; j < gLevel.SIZE; j++) {
+      console.log(`${i}/${j}`)
+      if (virtualBoard[i][j] !== MINE) {
+        var minesCount = setMinesNegsCount(virtualBoard, i, j)
+        virtualBoard[i][j] = minesCount
+      }
+      console.log(virtualBoard)
 
     }
   }
 }
+function onCellClicked(i, j) {
+  if (gGame.isOn) {
+    var elCell = document.querySelectorAll('cell')
+    gBoard[i][j] = virtualBoard[i][j]
+    console.log(gBoard[i][j])
+    if (gBoard[i][j] === MINE) {
+      endGame()
+    }
+    elCell = gGame.isShown = true
+    renderBoard(gBoard, '.board')
+  }
+}
+
+function endGame() {
+  var elEnd = document.getElementById('pop')
+  elEnd.style.display = 'block'
+  gGame.isOn = false
+}
+
