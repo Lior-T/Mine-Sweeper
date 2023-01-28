@@ -28,6 +28,13 @@ body {
   background: linear-gradient(to top,  black, blue);
 }
 
+.popup {
+  width:  400px;
+  height: 400px;
+  margin: auto;
+
+}
+
 #restart-btn{
   margin: auto;
   align-self:center;
