@@ -1,34 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
+'use strict'
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Mine Sweeper</title>
-  <link rel="stylesheet" href="css/app.css">
-</head>
+function renderBoard(mat, selector, gGame) {
 
-<body onload="init()">
-  <button id="restart-btn" onclick="init()">😀</button>
-  
-  <h2>life: <span></span></h2>
-  <div class="levels">
-    <button onclick="initEasy()" class="easy">Level 1</button>
-    <button onclick=initMedium() class="medium">Level 2</button>
-    <button onclick="initHard()" class="hard">Level 3</button>
-  </div>
-    <div class="board">
-    <table class="board-mine">
-      <tbody></tbody>
-    </table>
-  </div>
-  
-  <footer>Trosman Lior</footer>
-  
-  <script src="utils.js"></script>
-  <script src="game.js"></script>
-  <script src="bombs.js"></script>
-</body>
+  var strHTML = '<table><tbody>'
+  for (var i = 0; i < mat.length; i++) {
 
-</html>
+    strHTML += '<tr>'
+    for (var j = 0; j < mat[0].length; j++) {
+      const isSelected = gGame?.selected[`${i}-${j}`]
+      console.log('selected', { selected: gGame?.selected })
+      const cell = mat[i][j]
+      const className = `cell cell-${i}-${j} ${isSelected ? 'selected' : ''}`
+      strHTML += `<td class="${className}" onclick="onCellClicked(${i},${j})" oncontextmenu="onCellRightClicked(event,${i},${j})">${cell || ''}</td>`
+    }
+    strHTML += '</tr>'
+  }
+  strHTML += '</tbody></table>'
+
+  const elContainer = document.querySelector(selector)
+  elContainer.innerHTML = strHTML
+}
+
+// location is an object like this - { i: 2, j: 7 }
+function renderCell(location, value) {
+  // Select the elCell and set the value
+  const elCell = document.querySelector(`.cell-${location.i}-${location.j}`)
+  elCell.innerHTML = value
+}
+
+
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
