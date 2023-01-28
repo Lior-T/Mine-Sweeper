@@ -26,12 +26,13 @@ function init() {
   gGame.selected = {}
   gBoard = buildBoard()
   virtualBoard = buildBoard()
+  var elEnd = document.getElementById('restart-btn')
+  elEnd.innerHTML = '😀'
   createMines(virtualBoard, gLevel.MINES)
   initNegsCount(virtualBoard)
   renderBoard(gBoard, '.board', gGame)
   gGame.isOn = true
-  var elEnd = document.getElementById('pop')
-  elEnd.style.display = 'none'
+
   gGame.life = 3
 }
 
