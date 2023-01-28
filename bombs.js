@@ -5,7 +5,7 @@ var mines = []
 
 function getMinesLocations(virtualBoard, mines) {
   var avalibleCells = []
-  var mineLocations = []
+  var mineLocations = [
   for (var i = 0; i < gBoard.length; i++) {
     for (var j = 0; j < gBoard[i].length; j++) {
       avalibleCells.push([i, j])
